@@ -41,23 +41,27 @@ style=numeric
 
 \section*{Literature Review}
 
-\subsection{Ordinal Regression}
-Traditional multi-category cross-entropy loss fails to capture the inherent order in the target labels. In ordinal tasks, the difference between adjacent labels (e.g., 1 vs 2) is not equivalent to the difference between non-adjacent labels (e.g., 1 vs 5), making conventional classification methods inappropriate.\\
-Li et al. \cite{li2006ordinal} were among the first to propose extending binary classification methods to solve ordinal regression by transforming each ordinal label into a binary vector representing whether the label exceeds a specific threshold. While effective, this method faces rank inconsistency issues, where the predicted probabilities do not respect the inherent ordering in the target space.\\
+\subsection*{Ordinal Regression}
+Traditional multi-category cross-entropy loss fails to capture the inherent order in the target labels. In ordinal tasks, the difference between adjacent labels (e.g., 1 vs 2) is not equivalent to the difference between non-adjacent labels (e.g., 1 vs 5), making conventional classification methods inappropriate.
+
+Li et al. \cite{li2006ordinal} were among the first to propose extending binary classification methods to solve ordinal regression by transforming each ordinal label into a binary vector representing whether the label exceeds a specific threshold. While effective, this method faces rank inconsistency issues, where the predicted probabilities do not respect the inherent ordering in the target space.
+
 Cao et al. \cite{cao2020rank} proposed the CORAL (Rank-consistent Ordinal Regression for Neural Networks) method, which introduces a weight-sharing constraint in the output layer of the neural network to enforce rank consistency. While CORAL improved performance, it limited the model's expressiveness because of this constraint.
-To overcome this limitation, Shi et al. \cite{ordinal_regr1} proposed CORN (Conditional Ordinal Regression for Neural Networks), which eliminates the weight-sharing constraint. CORN achieves rank consistency by using conditional training sets and applying the chain rule for conditional probability distributions. \\
+To overcome this limitation, Shi et al. \cite{ordinal_regr1} proposed CORN (Conditional Ordinal Regression for Neural Networks), which eliminates the weight-sharing constraint. CORN achieves rank consistency by using conditional training sets and applying the chain rule for conditional probability distributions.
+
 Another work on improving ordinal regression tasks was made by Zhang et al. \cite{zhang2023improvingdeepregressionordinal}, who introduced an ordinal entropy regularizer. This regularizer is designed to encourage higher entropy in the feature representations while maintaining the ordinal relationships in the target space. They demonstrated that classification-based methods (such as those using cross-entropy loss) outperformed regression-based methods (such as those using mean squared error loss) because they promote a higher marginal entropy of the learned representations, which helps improve model performance in tasks like depth estimation and crowd counting.\\
 We are planning to explore these loss functions for our project.
 
-\subsection{Aleatoric \& Epistemic Uncertainty}
+\subsection*{Aleatoric \& Epistemic Uncertainty}
 
-Uncertainty quantification in deep learning models has gained significant attention, especially in classification tasks where the model’s predictions can have substantial real-world implications. In ordinal classification, where the target classes are discrete but ordered (e.g., {1, 2, 3, 4, 5}), understanding the uncertainty of predictions becomes essential for tasks like medical diagnosis, sentiment analysis, and many others. In these tasks, the predicted classes need to respect the ordinal relationships between the classes, such as 1 < 2 < 3 < 4 < 5, while also capturing the uncertainty that may arise from the model’s predictions.
+Uncertainty quantification in deep learning models has gained significant attention, especially in classification tasks where the model’s predictions can have substantial real-world implications. In ordinal classification, where the target classes are discrete but ordered (e.g., {1, 2, 3, 4, 5}), understanding the uncertainty of predictions becomes essential for tasks like medical diagnosis, sentiment analysis, and many others. In these tasks, the predicted classes need to respect the ordinal relationships between the classes, such as 1 < 2 < 3 < 4 < 5, while also capturing the uncertainty that may arise from the model’s predictions. The uncertainty in deep learning models is typically divided into two main types:
 
-The uncertainty in deep learning models is typically divided into two main types:
-- Aleatoric uncertainty: This arises from the inherent noise in the data, such as measurement errors or variability in the data itself.
-- Epistemic uncertainty: This is related to the model's uncertainty due to limited knowledge, which can be reduced as more data is provided or the model is improved.
+\begin{itemize}
+    \item Aleatoric uncertainty: This arises from the inherent noise in the data, such as measurement errors or variability in the data itself.
+    \item Epistemic uncertainty: This is related to the model's uncertainty due to limited knowledge, which can be reduced as more data is provided or the model is improved.
+\end{itemize}
 
-\subsubsection{Total Uncertainty Decomposition for Ordinal Classification}
+\subsubsection*{Total Uncertainty Decomposition for Ordinal Classification}
 
 In the context of ordinal classification, where the output consists of ordered categories, the total uncertainty of the model’s predictions can be decomposed into two components: aleatoric and epistemic uncertainty. The total predictive uncertainty \( H(\mathbb{E}[p(y_* | f(x_*; \theta))]) \) is given by\cite{band2022benchmarkingbayesiandeeplearning}:
 
@@ -71,7 +75,7 @@ Where:
 
 The first term, \( \mathbb{E}[H(p(y_* | f(x_*; \theta)))] \), quantifies the aleatoric uncertainty (data-related noise) in the model’s predictions. The second term, \( I(y_*; \Theta) \), captures the epistemic uncertainty (model-related uncertainty) due to the model’s parameters.
 
-\subsubsection{Aleatoric Uncertainty in Ordinal Classification}
+\subsubsection*{Aleatoric Uncertainty in Ordinal Classification}
 
 In ordinal classification, aleatoric uncertainty arises due to the inherent noise in the data \cite{combalia2020uncertainty}, \cite{carneiro2020deep}. For example, this could be due to mislabeled data points or data ambiguity, such as the difficulty in distinguishing between closely related ordinal classes (e.g., 3 and 4). Since ordinal regression is treated as a classification task, aleatoric uncertainty is often captured by the entropy of the model’s predicted class probabilities.
 
@@ -85,11 +89,11 @@ H(p(y_* | f(x_*; \theta))) = - \sum_{i=1}^{k} p(y_i | x) \log p(y_i | x)
 
 Here, \( p(y_i | x) \) is the probability of predicting class \( y_i \) given input \( x \), and \( k \) is the number of classes. 
 
-\subsubsection{Epistemic Uncertainty in Ordinal Classification}
+\subsubsection*{Epistemic Uncertainty in Ordinal Classification}
 
 Epistemic uncertainty reflects the uncertainty in the model due to incomplete knowledge or insufficient data, and it can be reduced by gathering more data or improving the model. 
 
-The mutual information between the model’s predictions and its parameters, \( I(y_*; \Theta) \), is used to represent epistemic uncertainty mathematically\cite{depeweg2018decomposition}:
+The mutual information between the model’s predictions and its parameters, \( I(y_*; \Theta) \), is used to represent epistemic uncertainty mathematically \cite{depeweg2018decomposition}:
 
 \[
 I(y_*; \Theta) = H(p(y_*)) - \mathbb{E}_{\theta}[H(p(y_* | x, \theta))]
@@ -98,48 +102,49 @@ I(y_*; \Theta) = H(p(y_*)) - \mathbb{E}_{\theta}[H(p(y_* | x, \theta))]
 Here, \( \mathbb{E}_{\theta}[H(p(y_* | x, \theta))] \) represents the expected entropy over different parameter samples (drawn from the posterior), capturing the model's uncertainty due to limited knowledge or variability in the model's parameters.
 
 \section*{Data Preprocessing}
-In this study, we will employ a dataset comprising 424 LGE MRI scans, each labeled for the purpose of Quality Assessment (QA) and has Left Atrium segmentations.  Expert reviewers rated these scans on a scale from 1 to 5. These 424 scans have a class imbalance problem because most scans are in the 2 to 4 range. \\
-Our dataset will be splitted into training and testing sets following an 80:20 split. Subsequently, the training set was further partitioned into a secondary training set and a validation set, adhering to the same 80:20 ratio.
+In this study, we will employ a dataset comprising 424 LGE MRI scans, each labeled for the purpose of Quality Assessment (QA) and has Left Atrium segmentations.  Expert reviewers rated these scans on a scale from 1 to 5. These 424 scans have a class imbalance problem because most scans are in the 2 to 4 range.
+
+Our dataset will be split into training and testing sets following an 80:20 split. Subsequently, the training set was further partitioned into a secondary training set and a validation set, adhering to the same 80:20 ratio.
 We will first obtain the region of interest by using the LA volume masks to crop it. This will be our input to the model.
 
 \section*{Model \& Loss Function}
 
 Our approach to uncertainty quantification in LGE-MRI quality assessment builds upon deep learning frameworks while incorporating uncertainty estimation techniques. The core of our model architecture processes 3D MRI scans through a ResNet3D encoder followed by a linear feature extractor and a classifier that outputs quality scores ranging from 1-5, where lower scores (1, 2) indicate non-diagnostic images and higher scores (3, 4, 5) represent diagnostic-quality images.
 
-Currently, we have implemented a baseline model that resizes 3D MRI scans to fit GPU memory constraints and uses cross-entropy loss for multi-class training. We are extending this model in several key directions:
+We have implemented a baseline model that resizes 3D MRI scans to fit within GPU memory constraints and uses cross-entropy loss for multi-class training. We are extending this model in several key directions:
 
 \begin{itemize}
     \item \textbf{Input Representation}: Rather than processing entire 3D volumes, we will extract cropped windows containing only regions of interest (ROI) from the LGE-MRI scans. This targeted approach will allow the model to focus on the most relevant cardiac structures while reducing computational requirements.
 
-    \item \textbf{Multi-Rater Learning}: Our dataset contains 424 LGE-MRI scans (3D), each independently rated by Three experts on a scale of 1-5. These different ratings by different experts reveal inter-rater variability of the scans. To address this inherent uncertainty, we will implement a multi-branch model architecture where each branch is trained to predict the ratings of a specific expert. By comparing predictions across branches, we can identify images with high diagnostic uncertainty that may require additional review in clinical settings.
+    \item \textbf{Multi-Rater Learning}: Our dataset contains 424 3D LGE-MRI scans, each independently rated by three experts on a scale of 1-5. These different ratings by different experts reveal inter-rater variability in the labels. To address this uncertainty, we will model quality of a 3D scan conditioned on the labeler. At test time, the law of total probability can be used to make a prediction. Additionally, the variability in predicted quality for a given 3D scan for different labelers identifies scans with high diagnostic uncertainty that may require additional review in clinical settings.
 
     \item \textbf{Loss Function Design}: We are implementing a composite loss function combining:
     \begin{itemize}
     \item Cross-Entropy (CE) loss for classification accuracy across the five quality classes
     \item Binary Cross-Entropy (BCE) for the diagnostic/non-diagnostic distinction
     \end{itemize}
-    The final loss function will be: $\lambda_1 \cdot \text{CE} + \lambda_2 \cdot \text{BCE}$, where $\lambda$ values are weighting coefficients that will be tuned during experimentation. We are also planning to include a ordinal regression loss, as mentioned in the literature review.
+    The final loss function will be: $\text{CE} + \lambda \cdot \text{BCE}$, where $\lambda$ is a hyperparamter. The motivation behind this composite loss is that there are two clinically relevant accuracy metrics. The first is the 1-5 classification accuracy and the second being whether the scan is non-diagnostic (1 or 2) or diagnostic (3, 4, or 5). We also plan to study an ordinal regression loss, as mentioned in the literature review.
     
-    Moreover, based on the model outputs from Three expert ratings, we will be implementing aleatoric and epistemic uncertainty methods, as mentioned in the literature review.
+    Moreover, based on the model outputs from three expert ratings, we will implement aleatoric and epistemic uncertainty methods, as mentioned in the literature review.
 \end{itemize}
 
 \section*{Future Direction \& Timeline}
 
-Building on our current progress, we have revised our tentative project timeline to focus on implementing and evaluating uncertainty quantification on the quality assessment: \\
+Building on our current progress, we have revised our tentative project timeline to focus on implementing and evaluating uncertainty quantification on the quality assessment:\\
 
-\textbf{March 22-31, 2025: Complete Model Implementation and Baseline Experiments}
+\noindent \textbf{March 22-31, 2025: Complete Model Implementation and Baseline Experiments}
 \begin{itemize}
     \item Complete ROI extraction and implement composite loss function
     \item Establish baseline model with proper evaluation metrics
 \end{itemize}
 
-\textbf{April 1-15, 2025: Uncertainty Quantification}
+\noindent \textbf{April 1-15, 2025: Uncertainty Quantification}
 \begin{itemize}
     \item Implement Uncertainty Quantification methods
     \item Design visualization tools for uncertainty estimates
 \end{itemize}
 
-\textbf{April 16-24, 2025: Experimental Evaluation and Final Reporting}
+\noindent \textbf{April 16-24, 2025: Experimental Evaluation and Final Reporting}
 \begin{itemize}
     \item Compare uncertainty quantification approaches
     \item Analyze results and prepare final report (structured like a conference paper)
